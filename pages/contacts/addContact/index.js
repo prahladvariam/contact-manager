@@ -1,22 +1,20 @@
-import { useState } from 'react';
-import { useRouter } from 'next/router';
+import { withRouter } from 'next/router';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Link from 'next/link';
+import React from 'react';
 
-function addContact()  {
+function AddContact()  {
     
     const state = {id: Date.now(),name: '', mobile:'', email:''};    
-    const router = useRouter()
-    const [contact, setContact] = useState()
     //console.log(contact);
     const submitContact = async (e) => {
         e.preventDefault()
         //console.log(contact);
-        const response = await fetch('/api/contacts', {
+        const response = await fetch('http://localhost:4000/contacts', {
             method: 'POST',
-            body: JSON.stringify({ contact }),
+            body: JSON.stringify(state),
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json; charset=UTF-8'
             }
         })
         //console.log(contact);
@@ -47,7 +45,7 @@ function addContact()  {
                 <label>Email:</label>
                 <input type='email' className='form-control' defaultValue={state.email} onChange={(e) => {state.email = e.target.value}} />
                 <div className='text-center'>
-                <button className='btn btn-primary m-2' onClick={(e) => setContact(state)}>Save</button>
+                <button className='btn btn-primary m-2'>Save</button>
                 </div>
             </form>
         </div>    
@@ -64,4 +62,4 @@ function addContact()  {
     )
 }
 
-export default addContact
+export default AddContact

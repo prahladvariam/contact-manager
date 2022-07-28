@@ -2,19 +2,21 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Link from 'next/link';
+import React from 'react';
 
-function editContact({ contact } )  {
+
+function EditContact({ contact } )  {
     
-    const state = contact;    
     const router = useRouter()
+    const state = contact;    
     const [newContact, setContact] = useState()
     const contactId = router.query.contactId;
     //console.log(newContact);
     const submitContact = async (e) => {
         e.preventDefault()
-        const response = await fetch(`/api/contacts/${newContact.id}`, {
+        const response = await fetch(`http://localhost:4000/contacts/${contact.id}`, {
             method: 'PUT',
-            body: JSON.stringify({ newContact }),
+            body: JSON.stringify(newContact),
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -60,11 +62,11 @@ function editContact({ contact } )  {
     )
 }
 
-export default editContact
+export default EditContact
 
 export async function getStaticPaths(){
 
-    const response = await fetch('http://localhost:3000/api/contacts')
+    const response = await fetch('http://localhost:4000/contacts')
     const contacts = await response.json()
     const paths = contacts.map(contact => ({
         params : { contactId: contact.id.toString() }
@@ -79,7 +81,7 @@ export async function getStaticPaths(){
 export async function getStaticProps(context){
     console.log('Regenrating Data')
     const { params } = context
-    const response = await fetch(`http://localhost:3000/api/contacts/${params.contactId}`)
+    const response = await fetch(`http://localhost:4000/contacts/${params.contactId}`)
     const data = await response.json()
 
         return {
